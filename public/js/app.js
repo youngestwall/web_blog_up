@@ -281,24 +281,32 @@ function displayFeaturedSlider(posts) {
   const slidesHTML = featuredPosts
     .map((post, index) => {
       const firstImage = extractFirstImage(post.content);
-      const preview = getContentPreview(post.content, 150);
+      const preview = getContentPreview(post.content, 120);
       return `
-    <div class="featured-slide ${index === 0 ? "active" : ""}" onclick="viewPostDetail(${post.id})">
-      <div class="featured-bg" style="background-image: url('${firstImage || "/assets/default-bg.jpg"}')"></div>
+    <div class="featured-slide ${index === 0 ? "active" : ""}">
+      <div class="featured-bg" style="background-image: url('${
+        firstImage || "/assets/default-bg.jpg"
+      }')"></div>
       <div class="featured-overlay"></div>
       <div class="featured-content">
-        <div class="featured-badge">
-          <i class="fas fa-star"></i>
-          <span>Bài viết mới nhất</span>
+        <div class="featured-info">
+          <div class="featured-badge">
+            <i class="fas fa-star"></i>
+            <span>Mới nhất</span>
+          </div>
+          <h2 class="featured-title">${escapeHtml(post.title)}</h2>
+          <p class="featured-preview">${preview}</p>
+          <div class="featured-meta">
+            <span><i class="fas fa-user"></i> ${escapeHtml(post.author)}</span>
+            <span><i class="fas fa-calendar"></i> ${formatDate(
+              post.created_at
+            )}</span>
+          </div>
         </div>
-        <h2 class="featured-title">${escapeHtml(post.title)}</h2>
-        <p class="featured-preview">${preview}</p>
-        <div class="featured-meta">
-          <span><i class="fas fa-user"></i> ${escapeHtml(post.author)}</span>
-          <span><i class="fas fa-calendar"></i> ${formatDate(post.created_at)}</span>
-        </div>
-        <button class="featured-btn">
-          <i class="fas fa-arrow-right"></i>
+        <button class="featured-btn" onclick="event.stopPropagation(); viewPostDetail(${
+          post.id
+        })">
+          <i class="fas fa-book-open"></i>
           <span>Đọc ngay</span>
         </button>
       </div>
@@ -313,7 +321,12 @@ function displayFeaturedSlider(posts) {
   const dotsContainer = document.getElementById("sliderDots");
   if (dotsContainer) {
     dotsContainer.innerHTML = featuredPosts
-      .map((_, index) => `<div class="slider-dot ${index === 0 ? "active" : ""}" data-slide="${index}"></div>`)
+      .map(
+        (_, index) =>
+          `<div class="slider-dot ${
+            index === 0 ? "active" : ""
+          }" data-slide="${index}"></div>`
+      )
       .join("");
 
     // Dot click handlers
@@ -332,7 +345,8 @@ function displayFeaturedSlider(posts) {
 
   if (prevBtn) {
     prevBtn.addEventListener("click", () => {
-      currentSlide = (currentSlide - 1 + featuredPosts.length) % featuredPosts.length;
+      currentSlide =
+        (currentSlide - 1 + featuredPosts.length) % featuredPosts.length;
       updateSlider();
     });
   }
