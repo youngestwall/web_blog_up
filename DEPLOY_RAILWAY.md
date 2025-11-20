@@ -1,32 +1,60 @@
-# 🚀 Hướng dẫn Deploy lên Railway
+# 🚀 Hướng dẫn Deploy lên Railway (Chi tiết từng bước)
+
+## ⚠️ QUAN TRỌNG: Railway V2 Changes
+
+Railway V2 sử dụng biến môi trường **KHÔNG CÓ UNDERSCORE**:
+- ✅ `MYSQLHOST` (đúng)
+- ❌ `MYSQL_HOST` (cũ, không dùng nữa)
 
 ## Bước 1: Tạo MySQL Service
 
 1. Vào Railway Dashboard: https://railway.app
-2. Click **"New Project"**
-3. Chọn **"Deploy MySQL"**
-4. Đợi MySQL service khởi động
+2. Click **"New Project"** → **"Deploy MySQL"**
+3. Đợi MySQL service khởi động (màu xanh)
+4. Click vào MySQL service → Tab **"Connect"**
+5. Copy lại thông tin (để backup):
+   - Host
+   - Port
+   - User
+   - Password
+   - Database
 
 ## Bước 2: Deploy Node.js App
 
-1. Trong cùng project, click **"New Service"**
-2. Chọn **"GitHub Repo"**
+1. Trong cùng project, click **"+ New"** → **"GitHub Repo"**
+2. Authorize GitHub nếu cần
 3. Chọn repository: `youngestwall/web_blog_up`
-4. Railway sẽ tự động detect Node.js và deploy
+4. Railway tự động detect Node.js và deploy
+5. Đợi deployment xong (màu xanh)
 
-## Bước 3: Link MySQL với App (QUAN TRỌNG!)
+## Bước 3: Link MySQL với App (BƯỚC QUAN TRỌNG NHẤT!)
+
+### Cách 1: Dùng Service Reference (Khuyến nghị ⭐)
 
 1. Click vào **Node.js service** (web_blog_up)
-2. Vào tab **"Settings"**
-3. Scroll xuống phần **"Service Variables"**
-4. Click **"Add Service Variables"**
-5. Chọn **MySQL service** từ dropdown
-6. Railway sẽ tự động add các biến:
-   - `MYSQL_HOST`
-   - `MYSQL_PORT`
-   - `MYSQL_USER`
-   - `MYSQL_PASSWORD`
-   - `MYSQL_DATABASE`
+2. Vào tab **"Variables"**
+3. Click **"+ New Variable"** → **"Add Reference"**
+4. Chọn **MySQL service** từ dropdown
+5. Railway tự động thêm:
+   - `MYSQLHOST`
+   - `MYSQLPORT`
+   - `MYSQLUSER`
+   - `MYSQLPASSWORD`
+   - `MYSQLDATABASE`
+
+### Cách 2: Thêm thủ công (nếu Cách 1 không work)
+
+Vào tab **"Variables"** của Node.js service, thêm từng biến:
+
+```
+MYSQLHOST=<copy từ MySQL Connect tab>
+MYSQLPORT=3306
+MYSQLUSER=root
+MYSQLPASSWORD=<copy từ MySQL Connect tab>
+MYSQLDATABASE=railway
+```
+
+**Lưu ý**: Railway V2 dùng `MYSQLHOST` không phải `MYSQL_HOST`!
 
 ## Bước 4: Thêm biến PORT (nếu cần)
 
@@ -40,12 +68,14 @@ Railway tự động set PORT, nhưng nếu cần custom:
 Có 2 cách:
 
 ### Cách 1: Dùng Railway Query Editor
+
 1. Click vào **MySQL service**
 2. Vào tab **"Query"**
 3. Copy nội dung file `schema.sql`
 4. Paste và chạy
 
 ### Cách 2: Dùng script setup-db.js (Local)
+
 ```bash
 # Trên máy local, update .env với thông tin Railway
 # Sau đó chạy:
@@ -55,12 +85,14 @@ node setup-db.js
 ## Bước 6: Deploy lại (nếu cần)
 
 Railway tự động redeploy khi có thay đổi, hoặc:
+
 1. Vào **"Deployments"** tab
 2. Click **"Redeploy"**
 
 ## ✅ Kiểm tra
 
 Sau khi deploy xong:
+
 1. Click vào **"Domains"** để lấy URL
 2. Truy cập URL: `https://your-app.railway.app`
 3. Kiểm tra logs: Tab **"Logs"** để xem kết nối database
@@ -68,20 +100,24 @@ Sau khi deploy xong:
 ## 🐛 Troubleshooting
 
 ### Lỗi: ECONNREFUSED
+
 - **Nguyên nhân**: Chưa link MySQL service với app
 - **Giải pháp**: Làm lại Bước 3
 
 ### Lỗi: Cannot find module
+
 - **Nguyên nhân**: Dependencies chưa cài
 - **Giải pháp**: Railway tự động chạy `npm install`, kiểm tra logs
 
 ### Lỗi: Table doesn't exist
+
 - **Nguyên nhân**: Chưa chạy schema.sql
 - **Giải pháp**: Làm Bước 5
 
 ## 📝 Biến môi trường trên Railway
 
 Railway sẽ tự động inject (khi link service):
+
 ```
 MYSQL_HOST=mysql.railway.internal
 MYSQL_PORT=3306
