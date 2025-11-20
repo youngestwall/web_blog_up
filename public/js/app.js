@@ -283,30 +283,26 @@ function displayFeaturedSlider(posts) {
       const firstImage = extractFirstImage(post.content);
       const preview = getContentPreview(post.content, 120);
       return `
-    <div class="featured-slide ${index === 0 ? "active" : ""}" onclick="viewPostDetail(${post.id})" style="cursor: pointer;">
+    <div class="featured-slide ${
+      index === 0 ? "active" : ""
+    }" onclick="viewPostDetail(${post.id})" style="cursor: pointer;">
       <div class="featured-bg" style="background-image: url('${
         firstImage || "/assets/default-bg.jpg"
       }')"></div>
       <div class="featured-overlay"></div>
       <div class="featured-content">
-        <div class="featured-info">
-          <div class="featured-badge">
-            <i class="fas fa-star"></i>
-            <span>Mới nhất</span>
-          </div>
-          <h2 class="featured-title">${escapeHtml(post.title)}</h2>
-          <p class="featured-preview">${preview}</p>
-          <div class="featured-meta">
-            <span><i class="fas fa-user"></i> ${escapeHtml(post.author)}</span>
-            <span><i class="fas fa-calendar"></i> ${formatDate(
-              post.created_at
-            )}</span>
-          </div>
+        <div class="featured-badge">
+          <i class="fas fa-star"></i>
+          <span>Mới nhất</span>
         </div>
-        <button class="featured-btn">
-          <i class="fas fa-book-open"></i>
-          <span>Đọc ngay</span>
-        </button>
+        <h2 class="featured-title">${escapeHtml(post.title)}</h2>
+        <p class="featured-preview">${preview}</p>
+        <div class="featured-meta">
+          <span><i class="fas fa-user"></i> ${escapeHtml(post.author)}</span>
+          <span><i class="fas fa-calendar"></i> ${formatDate(
+            post.created_at
+          )}</span>
+        </div>
       </div>
     </div>
   `;
@@ -372,11 +368,23 @@ function displayFeaturedSlider(posts) {
     });
   }
 
-  // Auto-play slider
-  setInterval(() => {
+  // Auto-play slider with pause on hover
+  let autoPlayInterval = setInterval(() => {
     currentSlide = (currentSlide + 1) % featuredPosts.length;
     updateSlider();
-  }, 5000);
+  }, 6000);
+
+  // Pause on hover
+  sliderContainer.addEventListener("mouseenter", () => {
+    clearInterval(autoPlayInterval);
+  });
+
+  sliderContainer.addEventListener("mouseleave", () => {
+    autoPlayInterval = setInterval(() => {
+      currentSlide = (currentSlide + 1) % featuredPosts.length;
+      updateSlider();
+    }, 6000);
+  });
 }
 
 // Display Posts
