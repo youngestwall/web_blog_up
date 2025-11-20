@@ -44,8 +44,10 @@ const config = {
 };
 
 // Check if using Railway internal hostname (won't work for external connections)
-if (config.host && config.host.includes('railway.internal')) {
-  console.error("⚠️  CẢNH BÁO: Đang dùng 'mysql.railway.internal' - chỉ hoạt động trong Railway Private Network");
+if (config.host && config.host.includes("railway.internal")) {
+  console.error(
+    "⚠️  CẢNH BÁO: Đang dùng 'mysql.railway.internal' - chỉ hoạt động trong Railway Private Network"
+  );
   console.error("❌ Để deploy thành công, làm theo:");
   console.error("");
   console.error("📋 HƯỚNG DẪN SỬA LỖI:");
