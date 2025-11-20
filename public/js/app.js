@@ -260,6 +260,110 @@ async function loadPosts() {
   }
 }
 
+// Display Featured Slider
+function displayFeaturedSlider(posts) {
+  const sliderContainer = document.getElementById("featuredSlider");
+  if (!sliderContainer) return;
+
+  if (posts.length === 0) {
+    sliderContainer.innerHTML = `
+      <div class="slider-loading">
+        <p>Chưa có bài viết nào</p>
+      </div>
+    `;
+    return;
+  }
+
+  // Get latest 5 posts for slider
+  const featuredPosts = posts.slice(0, 5);
+  let currentSlide = 0;
+
+  const slidesHTML = featuredPosts
+    .map((post, index) => {
+      const firstImage = extractFirstImage(post.content);
+      const preview = getContentPreview(post.content, 150);
+      return `
+    <div class="featured-slide ${index === 0 ? "active" : ""}" onclick="viewPostDetail(${post.id})">
+      <div class="featured-bg" style="background-image: url('${firstImage || "/assets/default-bg.jpg"}')"></div>
+      <div class="featured-overlay"></div>
+      <div class="featured-content">
+        <div class="featured-badge">
+          <i class="fas fa-star"></i>
+          <span>Bài viết mới nhất</span>
+        </div>
+        <h2 class="featured-title">${escapeHtml(post.title)}</h2>
+        <p class="featured-preview">${preview}</p>
+        <div class="featured-meta">
+          <span><i class="fas fa-user"></i> ${escapeHtml(post.author)}</span>
+          <span><i class="fas fa-calendar"></i> ${formatDate(post.created_at)}</span>
+        </div>
+        <button class="featured-btn">
+          <i class="fas fa-arrow-right"></i>
+          <span>Đọc ngay</span>
+        </button>
+      </div>
+    </div>
+  `;
+    })
+    .join("");
+
+  sliderContainer.innerHTML = slidesHTML;
+
+  // Setup dots
+  const dotsContainer = document.getElementById("sliderDots");
+  if (dotsContainer) {
+    dotsContainer.innerHTML = featuredPosts
+      .map((_, index) => `<div class="slider-dot ${index === 0 ? "active" : ""}" data-slide="${index}"></div>`)
+      .join("");
+
+    // Dot click handlers
+    const dots = dotsContainer.querySelectorAll(".slider-dot");
+    dots.forEach((dot) => {
+      dot.addEventListener("click", () => {
+        currentSlide = parseInt(dot.dataset.slide);
+        updateSlider();
+      });
+    });
+  }
+
+  // Navigation handlers
+  const prevBtn = document.getElementById("sliderPrev");
+  const nextBtn = document.getElementById("sliderNext");
+
+  if (prevBtn) {
+    prevBtn.addEventListener("click", () => {
+      currentSlide = (currentSlide - 1 + featuredPosts.length) % featuredPosts.length;
+      updateSlider();
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener("click", () => {
+      currentSlide = (currentSlide + 1) % featuredPosts.length;
+      updateSlider();
+    });
+  }
+
+  function updateSlider() {
+    const slides = sliderContainer.querySelectorAll(".featured-slide");
+    const dots = dotsContainer?.querySelectorAll(".slider-dot");
+
+    slides.forEach((slide, index) => {
+      slide.classList.toggle("active", index === currentSlide);
+    });
+
+    dots?.forEach((dot, index) => {
+      dot.classList.toggle("active", index === currentSlide);
+    });
+  }
+
+  // Auto-play slider
+  setInterval(() => {
+    currentSlide = (currentSlide + 1) % featuredPosts.length;
+    updateSlider();
+  }, 5000);
+}
+
 // Display Posts
 function displayPosts(posts) {
   if (posts.length === 0) {
@@ -272,6 +376,9 @@ function displayPosts(posts) {
     if (managePostsContainer) managePostsContainer.innerHTML = emptyMsg;
     return;
   }
+
+  // Display featured slider for home view
+  displayFeaturedSlider(posts);
 
   // Home view: Grid card style like icons
   const homePostsHTML = posts
