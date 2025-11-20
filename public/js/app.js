@@ -304,40 +304,48 @@ function displayPosts(posts) {
     })
     .join("");
 
-  // Manage view: Compact icon-style cards with thumbnails
+  // Manage view: Grid layout with edit/delete actions
   const managePostsHTML = posts
     .map((post) => {
-      const preview = getContentPreview(post.content, 60);
+      const preview = getContentPreview(post.content, 80);
       const firstImage = extractFirstImage(post.content);
       return `
-    <div class="manage-card" onclick="viewPostDetail(${post.id})">
-      <div class="manage-thumbnail">
+    <div class="post-card-grid manage-mode">
+      <div class="post-thumbnail">
         ${
           firstImage
             ? `<img src="${firstImage}" alt="${escapeHtml(post.title)}" />`
             : '<i class="fas fa-file-alt"></i>'
         }
       </div>
-      <div class="manage-content">
-        <h3 class="manage-title">${escapeHtml(post.title)}</h3>
-        <div class="manage-meta">
+      <div class="post-grid-content">
+        <h3 class="post-grid-title">${escapeHtml(post.title)}</h3>
+        <div class="post-grid-meta">
           <span><i class="fas fa-user"></i> ${escapeHtml(post.author)}</span>
           <span><i class="fas fa-calendar"></i> ${formatDate(
             post.created_at
           )}</span>
         </div>
-        <div class="manage-preview">${preview}</div>
+        <div class="post-grid-preview">${preview}</div>
       </div>
-      <div class="manage-actions" onclick="event.stopPropagation()">
-        <button class="btn-manage-edit" onclick="editPost(${
+      <div class="manage-overlay">
+        <button class="btn-manage-action btn-edit" onclick="editPost(${
           post.id
         })" title="Chỉnh sửa">
           <i class="fas fa-edit"></i>
+          <span>Sửa</span>
         </button>
-        <button class="btn-manage-delete" onclick="deletePost(${
+        <button class="btn-manage-action btn-delete" onclick="deletePost(${
           post.id
         })" title="Xóa">
           <i class="fas fa-trash-alt"></i>
+          <span>Xóa</span>
+        </button>
+        <button class="btn-manage-action btn-view" onclick="viewPostDetail(${
+          post.id
+        })" title="Xem">
+          <i class="fas fa-eye"></i>
+          <span>Xem</span>
         </button>
       </div>
     </div>
