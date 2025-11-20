@@ -1391,14 +1391,17 @@ body {
 /* Footer */
 .footer {
   margin-top: 3rem;
-  padding: 3rem 0;
+  padding: 2rem 0 1.5rem;
   border-top: 1px solid var(--border);
-  background: rgba(15, 23, 42, 0.5);
+  background: rgba(15, 23, 42, 0.3);
 }
 
 .footer-content {
   text-align: center;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Footer Date Badge */
@@ -1457,49 +1460,44 @@ body {
   text-align: center;
 }
 
+.footer-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .footer-brand {
   display: inline-flex;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: 0.75rem;
   font-family: "Space Grotesk", sans-serif;
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   font-weight: 700;
 }
 
-.footer-text {
+.footer-copyright {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   color: var(--text-muted);
-  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+  opacity: 0.9;
 }
 
-.footer-text strong {
+.footer-copyright strong {
   color: var(--text);
-  font-weight: 700;
+  font-weight: 600;
   background: linear-gradient(135deg, var(--primary), var(--ypn-gold));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.footer-text i.fa-heart {
-  color: var(--danger);
-  animation: heartbeat 1.5s infinite;
-}
-
-.footer-text i.fa-crown {
-  color: var(--ypn-gold);
-  margin-right: 0.25rem;
-  animation: float-icon 3s ease-in-out infinite;
-}
-
-@keyframes float-icon {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-3px);
-  }
+.footer-copyright i.fa-heart {
+  color: #ec4899;
+  font-size: 0.75rem;
+  animation: heartbeat 1.5s ease-in-out infinite;
 }
 
 @keyframes heartbeat {
@@ -1507,22 +1505,9 @@ body {
   100% {
     transform: scale(1);
   }
-  10%,
-  30% {
-    transform: scale(1.1);
+  50% {
+    transform: scale(1.15);
   }
-}
-
-.footer-copyright {
-  color: var(--text-muted);
-  font-size: 0.875rem;
-  margin-top: 0.5rem;
-  opacity: 0.8;
-}
-
-.footer-tech {
-  color: var(--text-muted);
-  font-size: 0.875rem;
 }
 
 /* YPN Watermark Badge */
@@ -1867,12 +1852,22 @@ body {
     font-size: 1.25rem;
   }
 
-  .footer-date-badge {
-    position: static;
-    margin: 0 auto 1.5rem;
+  .footer-content {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 0 1rem;
   }
 
-  .footer-content {
-    padding: 0 1rem;
+  .footer-date-badge {
+    position: static;
+    margin: 0;
+  }
+
+  .footer-brand {
+    font-size: 1rem;
+  }
+
+  .footer-copyright {
+    font-size: 0.75rem;
   }
 }
