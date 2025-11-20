@@ -269,39 +269,27 @@ function displayPosts(posts) {
     return;
   }
 
-  // Home view: Read-only posts with preview and read more button
+  // Home view: Grid card style like icons
   const homePostsHTML = posts
     .map((post) => {
-      const preview = getContentPreview(post.content, 200);
-      const isLong = post.content.length > 200;
+      const preview = getContentPreview(post.content, 80);
+      const firstImage = extractFirstImage(post.content);
       return `
-    <div class="post-card" data-post-id="${post.id}">
-      <div class="post-header">
-        <h2 class="post-title">${escapeHtml(post.title)}</h2>
-        <div class="post-meta">
-          <div class="meta-item">
-            <i class="fas fa-user"></i>
-            <span>${escapeHtml(post.author)}</span>
-          </div>
-          <div class="meta-item">
-            <i class="fas fa-calendar-alt"></i>
-            <span>${formatDate(post.created_at)}</span>
-          </div>
-        </div>
+    <div class="post-card-grid" data-post-id="${post.id}" onclick="viewPostDetail(${post.id})">
+      <div class="post-thumbnail">
+        ${firstImage ? `<img src="${firstImage}" alt="${escapeHtml(post.title)}" />` : '<i class="fas fa-file-alt"></i>'}
       </div>
-      <div class="post-content post-preview" id="preview-${
-        post.id
-      }">${preview}</div>
-      <div class="post-content post-full hidden" id="full-${post.id}">${
-        post.content
-      }</div>
-      <div class="post-actions">
-        <button class="btn-action btn-read-more" onclick="viewPostDetail(${
-          post.id
-        })">
-          <i class="fas fa-book-open"></i>
-          <span>Đọc bài viết</span>
-        </button>
+      <div class="post-grid-content">
+        <h3 class="post-grid-title">${escapeHtml(post.title)}</h3>
+        <div class="post-grid-meta">
+          <span><i class="fas fa-user"></i> ${escapeHtml(post.author)}</span>
+          <span><i class="fas fa-calendar"></i> ${formatDate(post.created_at)}</span>
+        </div>
+        <div class="post-grid-preview">${preview}</div>
+      </div>
+      <div class="post-grid-overlay">
+        <i class="fas fa-book-open"></i>
+        <span>Đọc ngay</span>
       </div>
     </div>
   `;
@@ -515,6 +503,14 @@ function getContentPreview(content, maxLength) {
   Array.from(doc.body.childNodes).forEach((node) => traverseNodes(node));
 
   return result + "...";
+}
+
+// Extract first image from content
+function extractFirstImage(content) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(content, "text/html");
+  const img = doc.querySelector("img");
+  return img ? img.getAttribute("src") : null;
 }
 
 // Utility Functions
