@@ -31,28 +31,54 @@ document.addEventListener("DOMContentLoaded", () => {
   loadPosts();
   setupEventListeners();
   startLiveClock();
+  startVisitTimer();
 });
 
 // Live Clock Function
 function startLiveClock() {
   const clockElement = document.getElementById("liveClock");
-  
+
   function updateClock() {
     const now = new Date();
     const hours = String(now.getHours()).padStart(2, "0");
     const minutes = String(now.getMinutes()).padStart(2, "0");
     const seconds = String(now.getSeconds()).padStart(2, "0");
-    
+
     if (clockElement) {
       clockElement.textContent = `${hours}:${minutes}:${seconds}`;
     }
   }
-  
+
   // Update immediately
   updateClock();
-  
+
   // Update every second
   setInterval(updateClock, 1000);
+}
+
+// Visit Timer Function - Count up from 00:00:00
+function startVisitTimer() {
+  const timerElement = document.getElementById("visitTimer");
+  let totalSeconds = 0;
+
+  function updateTimer() {
+    totalSeconds++;
+    
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    const hoursStr = String(hours).padStart(2, "0");
+    const minutesStr = String(minutes).padStart(2, "0");
+    const secondsStr = String(seconds).padStart(2, "0");
+
+    if (timerElement) {
+      timerElement.textContent = `${hoursStr}:${minutesStr}:${secondsStr}`;
+    }
+  }
+
+  // Update every second
+  setInterval(updateTimer, 1000);
 }
 
 // Page Navigation
