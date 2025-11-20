@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setupEventListeners();
   startLiveClock();
   startVisitTimer();
+  updateFooterDate();
 });
 
 // Live Clock Function
@@ -63,7 +64,7 @@ function startVisitTimer() {
 
   function updateTimer() {
     totalSeconds++;
-    
+
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
@@ -79,6 +80,28 @@ function startVisitTimer() {
 
   // Update every second
   setInterval(updateTimer, 1000);
+}
+
+// Footer Date Function - Display current date in dd/mm/yyyy format
+function updateFooterDate() {
+  const dateElement = document.getElementById("footerDate");
+  
+  function updateDate() {
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, "0");
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const year = now.getFullYear();
+    
+    if (dateElement) {
+      dateElement.textContent = `${day}/${month}/${year}`;
+    }
+  }
+  
+  // Update immediately
+  updateDate();
+  
+  // Update every minute (date doesn't change often)
+  setInterval(updateDate, 60000);
 }
 
 // Page Navigation
