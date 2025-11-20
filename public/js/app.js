@@ -30,7 +30,30 @@ document.addEventListener("DOMContentLoaded", () => {
   initQuillEditor();
   loadPosts();
   setupEventListeners();
+  startLiveClock();
 });
+
+// Live Clock Function
+function startLiveClock() {
+  const clockElement = document.getElementById("liveClock");
+  
+  function updateClock() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    const seconds = String(now.getSeconds()).padStart(2, "0");
+    
+    if (clockElement) {
+      clockElement.textContent = `${hours}:${minutes}:${seconds}`;
+    }
+  }
+  
+  // Update immediately
+  updateClock();
+  
+  // Update every second
+  setInterval(updateClock, 1000);
+}
 
 // Page Navigation
 function showHome() {
@@ -246,15 +269,23 @@ function displayPosts(posts) {
         <div class="post-info">
           <h3 class="post-title-compact">${escapeHtml(post.title)}</h3>
           <div class="post-meta-compact">
-            <span class="meta-compact"><i class="fas fa-user"></i> ${escapeHtml(post.author)}</span>
-            <span class="meta-compact"><i class="fas fa-calendar"></i> ${formatDate(post.created_at)}</span>
+            <span class="meta-compact"><i class="fas fa-user"></i> ${escapeHtml(
+              post.author
+            )}</span>
+            <span class="meta-compact"><i class="fas fa-calendar"></i> ${formatDate(
+              post.created_at
+            )}</span>
           </div>
         </div>
         <div class="post-actions-compact">
-          <button class="btn-icon btn-edit-compact" onclick="editPost(${post.id})" title="Chỉnh sửa">
+          <button class="btn-icon btn-edit-compact" onclick="editPost(${
+            post.id
+          })" title="Chỉnh sửa">
             <i class="fas fa-edit"></i>
           </button>
-          <button class="btn-icon btn-delete-compact" onclick="deletePost(${post.id})" title="Xóa">
+          <button class="btn-icon btn-delete-compact" onclick="deletePost(${
+            post.id
+          })" title="Xóa">
             <i class="fas fa-trash-alt"></i>
           </button>
         </div>
