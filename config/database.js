@@ -8,17 +8,33 @@ const isLocal = !process.env.RAILWAY_ENVIRONMENT;
 console.log("🌍 Environment:", {
   isLocal,
   hasRailwayVars,
-  env: process.env.NODE_ENV || 'development'
+  env: process.env.NODE_ENV || "development",
 });
 
 // Cấu hình kết nối MySQL
 // Railway V2 sử dụng MYSQLHOST, MYSQLPORT, etc. (không có underscore)
 const config = {
   host: process.env.MYSQLHOST || process.env.MYSQL_HOST || process.env.DB_HOST,
-  port: parseInt(process.env.MYSQLPORT || process.env.MYSQL_PORT || process.env.DB_PORT || 3306),
-  user: process.env.MYSQLUSER || process.env.MYSQL_USER || process.env.DB_USER || 'root',
-  password: process.env.MYSQLPASSWORD || process.env.MYSQL_PASSWORD || process.env.DB_PASSWORD,
-  database: process.env.MYSQLDATABASE || process.env.MYSQL_DATABASE || process.env.DB_NAME || 'railway',
+  port: parseInt(
+    process.env.MYSQLPORT ||
+      process.env.MYSQL_PORT ||
+      process.env.DB_PORT ||
+      3306
+  ),
+  user:
+    process.env.MYSQLUSER ||
+    process.env.MYSQL_USER ||
+    process.env.DB_USER ||
+    "root",
+  password:
+    process.env.MYSQLPASSWORD ||
+    process.env.MYSQL_PASSWORD ||
+    process.env.DB_PASSWORD,
+  database:
+    process.env.MYSQLDATABASE ||
+    process.env.MYSQL_DATABASE ||
+    process.env.DB_NAME ||
+    "railway",
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
@@ -27,30 +43,43 @@ const config = {
   connectTimeout: 60000,
 };
 
+// Check if using Railway internal hostname (won't work for external connections)
+if (config.host && config.host.includes('railway.internal')) {
+  console.error("⚠️  CẢNH BÁO: Đang dùng 'mysql.railway.internal' - chỉ hoạt động trong Railway Private Network");
+  console.error("❌ Để deploy thành công, làm theo:");
+  console.error("");
+  console.error("📋 HƯỚNG DẪN SỬA LỖI:");
+  console.error("1. Vào Railway → MySQL Service → Tab 'Connect'");
+  console.error("2. Chọn 'Public Network' (KHÔNG PHẢI Private)");
+  console.error("3. Copy thông tin:");
+  console.error("   - Host (vd: yamanote.proxy.rlwy.net)");
+  console.error("   - Port (vd: 56290)");
+  console.error("   - Password");
+  console.error("");
+  console.error("4. Vào Node.js Service → Tab 'Variables'");
+  console.error("5. XÓA các biến MYSQL* cũ nếu có");
+  console.error("6. Thêm thủ công:");
+  console.error("   MYSQLHOST=yamanote.proxy.rlwy.net");
+  console.error("   MYSQLPORT=56290");
+  console.error("   MYSQLUSER=root");
+  console.error("   MYSQLPASSWORD=<your-password>");
+  console.error("   MYSQLDATABASE=railway");
+  console.error("");
+  console.error("7. Redeploy");
+}
+
 // Validate config
 if (!config.host || !config.password) {
   console.error("❌ THIẾU THÔNG TIN KẾT NỐI DATABASE!");
-  console.error("📋 Hướng dẫn cấu hình Railway:");
-  console.error("1. Vào Railway Dashboard → Your Project");
-  console.error("2. Click vào Node.js Service");
-  console.error("3. Tab 'Variables' → Click '+ New Variable'");
-  console.error("4. Click 'Add Reference' → Chọn MySQL service");
-  console.error("5. Railway sẽ tự động thêm MYSQLHOST, MYSQLPORT, etc.");
-  console.error("");
-  console.error("🔧 Biến cần thiết:");
-  console.error("  MYSQLHOST - MySQL host");
-  console.error("  MYSQLPORT - MySQL port (default: 3306)");
-  console.error("  MYSQLUSER - MySQL user (default: root)");
-  console.error("  MYSQLPASSWORD - MySQL password");
-  console.error("  MYSQLDATABASE - Database name (default: railway)");
+  console.error("Cần có: MYSQLHOST, MYSQLPASSWORD");
 }
 
 console.log("🔧 Database config:", {
-  host: config.host || '❌ MISSING',
+  host: config.host || "❌ MISSING",
   port: config.port,
   user: config.user,
   database: config.database,
-  hasPassword: !!config.password
+  hasPassword: !!config.password,
 });
 
 // Tạo pool connection

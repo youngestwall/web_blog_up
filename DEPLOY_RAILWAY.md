@@ -3,6 +3,7 @@
 ## ⚠️ QUAN TRỌNG: Railway V2 Changes
 
 Railway V2 sử dụng biến môi trường **KHÔNG CÓ UNDERSCORE**:
+
 - ✅ `MYSQLHOST` (đúng)
 - ❌ `MYSQL_HOST` (cũ, không dùng nữa)
 
