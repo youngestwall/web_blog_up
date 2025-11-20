@@ -85,21 +85,21 @@ function startVisitTimer() {
 // Footer Date Function - Display current date in dd/mm/yyyy format
 function updateFooterDate() {
   const dateElement = document.getElementById("footerDate");
-  
+
   function updateDate() {
     const now = new Date();
     const day = String(now.getDate()).padStart(2, "0");
     const month = String(now.getMonth() + 1).padStart(2, "0");
     const year = now.getFullYear();
-    
+
     if (dateElement) {
       dateElement.textContent = `${day}/${month}/${year}`;
     }
   }
-  
+
   // Update immediately
   updateDate();
-  
+
   // Update every minute (date doesn't change often)
   setInterval(updateDate, 60000);
 }

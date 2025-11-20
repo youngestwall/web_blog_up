@@ -277,58 +277,6 @@ body {
   text-align: center;
 }
 
-/* Visit Timer Widget */
-.timer-widget {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  background: linear-gradient(
-    135deg,
-    rgba(236, 72, 153, 0.1),
-    rgba(251, 113, 133, 0.1)
-  );
-  border: 1px solid rgba(236, 72, 153, 0.3);
-  border-radius: 9999px;
-  color: #ec4899;
-  font-size: 0.875rem;
-  font-weight: 600;
-  font-family: "Space Grotesk", monospace;
-  letter-spacing: 0.05em;
-  animation: pulse-glow-pink 2s ease-in-out infinite;
-}
-
-@keyframes pulse-glow-pink {
-  0%,
-  100% {
-    box-shadow: 0 0 10px rgba(236, 72, 153, 0.2);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(236, 72, 153, 0.4);
-  }
-}
-
-.timer-widget i {
-  font-size: 1rem;
-  animation: pulse-stopwatch 1.5s ease-in-out infinite;
-}
-
-@keyframes pulse-stopwatch {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.15);
-  }
-}
-
-#visitTimer {
-  min-width: 70px;
-  text-align: center;
-  font-variant-numeric: tabular-nums;
-}
-
 .nav-btn {
   display: flex;
   align-items: center;
@@ -1509,6 +1457,58 @@ body {
   text-align: center;
 }
 
+/* Footer Timer Badge */
+.footer-timer-badge {
+  position: absolute;
+  right: 1rem;
+  top: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(
+    135deg,
+    rgba(236, 72, 153, 0.08),
+    rgba(251, 113, 133, 0.08)
+  );
+  border: 1px solid rgba(236, 72, 153, 0.25);
+  border-radius: 9999px;
+  color: #ec4899;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: "Space Grotesk", monospace;
+  letter-spacing: 0.05em;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+.footer-timer-badge:hover {
+  opacity: 1;
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(236, 72, 153, 0.3);
+}
+
+.footer-timer-badge i {
+  font-size: 0.875rem;
+  animation: pulse-stopwatch-slow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-stopwatch-slow {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+#visitTimer {
+  min-width: 60px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
 .footer-brand {
   display: inline-flex;
   align-items: center;
@@ -1746,11 +1746,6 @@ body {
     justify-content: center;
   }
 
-  .timer-widget {
-    width: 100%;
-    justify-content: center;
-  }
-
   .nav-btn {
     width: 100%;
     justify-content: center;
@@ -1881,6 +1876,11 @@ body {
   }
 
   .footer-date-badge {
+    position: static;
+    margin: 0 auto 1rem;
+  }
+
+  .footer-timer-badge {
     position: static;
     margin: 0 auto 1.5rem;
   }
