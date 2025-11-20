@@ -283,7 +283,7 @@ function displayFeaturedSlider(posts) {
       const firstImage = extractFirstImage(post.content);
       const preview = getContentPreview(post.content, 120);
       return `
-    <div class="featured-slide ${index === 0 ? "active" : ""}">
+    <div class="featured-slide ${index === 0 ? "active" : ""}" onclick="viewPostDetail(${post.id})" style="cursor: pointer;">
       <div class="featured-bg" style="background-image: url('${
         firstImage || "/assets/default-bg.jpg"
       }')"></div>
@@ -303,9 +303,7 @@ function displayFeaturedSlider(posts) {
             )}</span>
           </div>
         </div>
-        <button class="featured-btn" onclick="event.stopPropagation(); viewPostDetail(${
-          post.id
-        })">
+        <button class="featured-btn">
           <i class="fas fa-book-open"></i>
           <span>Đọc ngay</span>
         </button>
@@ -332,7 +330,8 @@ function displayFeaturedSlider(posts) {
     // Dot click handlers
     const dots = dotsContainer.querySelectorAll(".slider-dot");
     dots.forEach((dot) => {
-      dot.addEventListener("click", () => {
+      dot.addEventListener("click", (e) => {
+        e.stopPropagation();
         currentSlide = parseInt(dot.dataset.slide);
         updateSlider();
       });
@@ -344,7 +343,8 @@ function displayFeaturedSlider(posts) {
   const nextBtn = document.getElementById("sliderNext");
 
   if (prevBtn) {
-    prevBtn.addEventListener("click", () => {
+    prevBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
       currentSlide =
         (currentSlide - 1 + featuredPosts.length) % featuredPosts.length;
       updateSlider();
@@ -352,7 +352,8 @@ function displayFeaturedSlider(posts) {
   }
 
   if (nextBtn) {
-    nextBtn.addEventListener("click", () => {
+    nextBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
       currentSlide = (currentSlide + 1) % featuredPosts.length;
       updateSlider();
     });
