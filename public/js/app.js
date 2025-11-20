@@ -275,15 +275,23 @@ function displayPosts(posts) {
       const preview = getContentPreview(post.content, 80);
       const firstImage = extractFirstImage(post.content);
       return `
-    <div class="post-card-grid" data-post-id="${post.id}" onclick="viewPostDetail(${post.id})">
+    <div class="post-card-grid" data-post-id="${
+      post.id
+    }" onclick="viewPostDetail(${post.id})">
       <div class="post-thumbnail">
-        ${firstImage ? `<img src="${firstImage}" alt="${escapeHtml(post.title)}" />` : '<i class="fas fa-file-alt"></i>'}
+        ${
+          firstImage
+            ? `<img src="${firstImage}" alt="${escapeHtml(post.title)}" />`
+            : '<i class="fas fa-file-alt"></i>'
+        }
       </div>
       <div class="post-grid-content">
         <h3 class="post-grid-title">${escapeHtml(post.title)}</h3>
         <div class="post-grid-meta">
           <span><i class="fas fa-user"></i> ${escapeHtml(post.author)}</span>
-          <span><i class="fas fa-calendar"></i> ${formatDate(post.created_at)}</span>
+          <span><i class="fas fa-calendar"></i> ${formatDate(
+            post.created_at
+          )}</span>
         </div>
         <div class="post-grid-preview">${preview}</div>
       </div>
@@ -296,38 +304,42 @@ function displayPosts(posts) {
     })
     .join("");
 
-  // Manage view: Compact posts with preview and action buttons
+  // Manage view: Compact icon-style cards with thumbnails
   const managePostsHTML = posts
     .map((post) => {
-      const preview = getContentPreview(post.content, 150);
+      const preview = getContentPreview(post.content, 60);
+      const firstImage = extractFirstImage(post.content);
       return `
-    <div class="post-card post-card-compact">
-      <div class="post-header-compact">
-        <div class="post-info">
-          <h3 class="post-title-compact">${escapeHtml(post.title)}</h3>
-          <div class="post-meta-compact">
-            <span class="meta-compact"><i class="fas fa-user"></i> ${escapeHtml(
-              post.author
-            )}</span>
-            <span class="meta-compact"><i class="fas fa-calendar"></i> ${formatDate(
-              post.created_at
-            )}</span>
-          </div>
-        </div>
-        <div class="post-actions-compact">
-          <button class="btn-icon btn-edit-compact" onclick="editPost(${
-            post.id
-          })" title="Chỉnh sửa">
-            <i class="fas fa-edit"></i>
-          </button>
-          <button class="btn-icon btn-delete-compact" onclick="deletePost(${
-            post.id
-          })" title="Xóa">
-            <i class="fas fa-trash-alt"></i>
-          </button>
-        </div>
+    <div class="manage-card" onclick="viewPostDetail(${post.id})">
+      <div class="manage-thumbnail">
+        ${
+          firstImage
+            ? `<img src="${firstImage}" alt="${escapeHtml(post.title)}" />`
+            : '<i class="fas fa-file-alt"></i>'
+        }
       </div>
-      <div class="post-preview-compact">${preview}</div>
+      <div class="manage-content">
+        <h3 class="manage-title">${escapeHtml(post.title)}</h3>
+        <div class="manage-meta">
+          <span><i class="fas fa-user"></i> ${escapeHtml(post.author)}</span>
+          <span><i class="fas fa-calendar"></i> ${formatDate(
+            post.created_at
+          )}</span>
+        </div>
+        <div class="manage-preview">${preview}</div>
+      </div>
+      <div class="manage-actions" onclick="event.stopPropagation()">
+        <button class="btn-manage-edit" onclick="editPost(${
+          post.id
+        })" title="Chỉnh sửa">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button class="btn-manage-delete" onclick="deletePost(${
+          post.id
+        })" title="Xóa">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+      </div>
     </div>
   `;
     })
