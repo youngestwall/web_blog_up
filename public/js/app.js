@@ -236,38 +236,33 @@ function displayPosts(posts) {
     })
     .join("");
 
-  // Manage view: Posts with edit/delete buttons
+  // Manage view: Compact posts with preview and action buttons
   const managePostsHTML = posts
-    .map(
-      (post) => `
-    <div class="post-card">
-      <div class="post-header">
-        <h2 class="post-title">${escapeHtml(post.title)}</h2>
-        <div class="post-meta">
-          <div class="meta-item">
-            <i class="fas fa-user"></i>
-            <span>${escapeHtml(post.author)}</span>
-          </div>
-          <div class="meta-item">
-            <i class="fas fa-calendar-alt"></i>
-            <span>${formatDate(post.created_at)}</span>
+    .map((post) => {
+      const preview = getContentPreview(post.content, 150);
+      return `
+    <div class="post-card post-card-compact">
+      <div class="post-header-compact">
+        <div class="post-info">
+          <h3 class="post-title-compact">${escapeHtml(post.title)}</h3>
+          <div class="post-meta-compact">
+            <span class="meta-compact"><i class="fas fa-user"></i> ${escapeHtml(post.author)}</span>
+            <span class="meta-compact"><i class="fas fa-calendar"></i> ${formatDate(post.created_at)}</span>
           </div>
         </div>
+        <div class="post-actions-compact">
+          <button class="btn-icon btn-edit-compact" onclick="editPost(${post.id})" title="Chỉnh sửa">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button class="btn-icon btn-delete-compact" onclick="deletePost(${post.id})" title="Xóa">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </div>
       </div>
-      <div class="post-content">${post.content}</div>
-      <div class="post-actions">
-        <button class="btn-action btn-edit" onclick="editPost(${post.id})">
-          <i class="fas fa-edit"></i>
-          <span>Chỉnh sửa</span>
-        </button>
-        <button class="btn-action btn-delete" onclick="deletePost(${post.id})">
-          <i class="fas fa-trash-alt"></i>
-          <span>Xóa</span>
-        </button>
-      </div>
+      <div class="post-preview-compact">${preview}</div>
     </div>
-  `
-    )
+  `;
+    })
     .join("");
 
   if (homePostsContainer) homePostsContainer.innerHTML = homePostsHTML;
